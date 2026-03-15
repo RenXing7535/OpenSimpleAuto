@@ -22,3 +22,6 @@ user_prompt_path=os.getenv('user_prompt_path')
 history_response_path=os.getenv('history_response_path')
 
 screen_path=os.getenv('screen_path')
+
+# workspace path
+workspace_path=os.getenv('workspace_path')

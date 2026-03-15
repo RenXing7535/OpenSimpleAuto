@@ -6,8 +6,9 @@
     |<type2>["滑动的大小"]
     |<type3>["输入内容"]
     |<type4>["等待时间"]
+    |<type5>["BackSpace删除,要求是整数"]
+    |<type6>["这里需要填入一个系统级指令的名称,具体你要参考指令表"]
     |<final>["True/False"]
-
     <type>可以自由组合排列
     <final>必须在最后一个指令，用于决定下一轮操作获取到什么内容
     """
@@ -45,6 +46,12 @@ def deal_actions(actions):
         elif txt_head == "<final>":
             final = text_splite[0]
             result = {"type":txt_head,"final":bool(final)}
+        elif txt_head == "<type5>":
+            backspace_num = text_splite[0]
+            result = {"type":txt_head,"backspace_num":int(backspace_num)}
+        elif txt_head == "<type6>":
+            system_cmd = text_splite[0]
+            result = {"type":txt_head,"system_cmd":system_cmd}
         results.append(result)
     return results
 # 

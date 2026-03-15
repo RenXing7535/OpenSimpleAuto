@@ -1,6 +1,22 @@
 import pyautogui
 import pyperclip
 import time
+import src.read_env as read_env
+import src.actions_set as actions_set
+
+# 处理type6指令
+def deal_type6(action_name):
+    """  系统级指令表参照表：
+    open_workspace
+    create_file:path_name
+    create_file_folder:path_name
+    open_file:path_name
+    open_file_folder:path_name
+    open_a_cmd
+    cmd_input_and_act:action_txt
+    """
+    actions_set.deal_cmd_action(action_name, read_env.workspace_path)
+    pass
 
 # 这里是关于指令执行的代码
 def execute_instruction(actions, screen_width, screen_height):
@@ -24,6 +40,13 @@ def execute_instruction(actions, screen_width, screen_height):
                     pyautogui.hotkey('ctrl', 'v')
                 elif instruction["type"] == "<type4>":
                     time.sleep(instruction['wait_time'])
+                elif instruction["type"] == "<type5>":
+                    backspace_num = instruction["backspace_num"]
+                    for i in range(backspace_num):
+                        pyautogui.press('backspace')
+                elif instruction["type"] == "<type6>":
+                    system_cmd = instruction["system_cmd"]
+                    deal_type6(system_cmd)
                 elif instruction["type"] == "<final>":
                     pass
             # 等待0.5秒
@@ -31,3 +54,4 @@ def execute_instruction(actions, screen_width, screen_height):
         except Exception as e:
             print(f"执行指令时出错: {e}")
     return instruction["type"]
+

@@ -1,4 +1,8 @@
 memory{
-    这里是你的短期记忆: 
-    这里是你的长期记忆: 帮我找到燕云16s的官网
+    user_prompt:shortmemory{
+   
+}
+longmemory{
+    
+}
 }

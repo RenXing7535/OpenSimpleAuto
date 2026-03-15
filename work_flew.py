@@ -61,11 +61,15 @@ def main():
             file_history.close()
         # 处理响应
         result = read_instruction.deal_response(response)
-        thought = result["thought"]
+        thought_memory = result["thought_memory"]
         actions = result["actions"]
         # 记录历史思考
+        with open(f"{read_env.assistant_prompt_path}", 'a', encoding='utf-8') as memory:
+            memory.write(f"time:{time.time()}:{thought_memory["thought"]}\n")
+            memory.close()
+        # 记录记忆
         with open(f"{read_env.memory_path}", 'a', encoding='utf-8') as memory:
-            memory.write(thought)
+            memory.write(thought_memory["memory"])
             memory.close()
         # 执行动作
         act_instruction.execute_instruction(actions,screen_width,screen_height)
