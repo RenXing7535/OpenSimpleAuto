@@ -64,7 +64,7 @@ def turn_response_to_text(response):
         if chunk.choices[0].delta.content:
             text += chunk.choices[0].delta.content
     print("\n文本转化程序的结果：")
-    print(text)
+    print(text[1:10],"...",text[-10:])
     return text
 
 def send_request_get_response(request, model_name, api_url, api_key, max_tokens=1024, temperature=0.8, top_p=0.9):

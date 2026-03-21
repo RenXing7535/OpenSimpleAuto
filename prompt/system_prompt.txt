@@ -11,7 +11,9 @@ prompt{
     |<final>["True/False"]
 
     注释:
-    <type>可以自由组合排列
+    必须你每次都必须至少返回头head和结尾final，并且至少包含一个type指令
+    <type>可以自由组合排列 建议你每次至少返回三条type类型的指令
+    必须有type
     <final>必须在最后一个指令，每次系统默认给你的是OCR或者别的技术手段得到的文本屏幕理解
     如果这些信息不足以推理下一步的行为,你需要让final为True,在下一轮中你将会直接得到屏幕截图,否则应该是相反的
     不要尝试去修改任何你看到的脚本内容
@@ -19,6 +21,7 @@ prompt{
     |<head>["尝试点击资源管理器中的src文件夹以展开它",""]
     |<type1>["(0.04, 0.20)","LEFT"]
     |<final>["False"]
+    特别的如果你输入了内容 那么就紧接着使用指令按一下回车
 
     系统级指令表参照表：
     工作区的地址是D:6workspace\建议计算好路径
@@ -28,7 +31,6 @@ prompt{
     open_file:path_name  # 将会默认拼接工作空间的路径
     open_file_folder:path_name  # 将会默认拼接工作空间的路径
     cmd_input_and_act:action_txt
-
     press:key # 例如 "F11" 将会打开全屏
 
     

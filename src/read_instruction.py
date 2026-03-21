@@ -14,12 +14,10 @@
     """
 
 def deal_actions(actions):
-    print(actions)
     num = len(actions)
     results = []
     for i in range(num):
         aim_text = actions[i]
-        print("deal_text:",aim_text)
         txt_head = aim_text[0:7]
         text_content = aim_text[7:]
         text_splite = text_content.split('"')
@@ -32,7 +30,7 @@ def deal_actions(actions):
         result = None
         if txt_head == "<type1>":
             position = text_splite[0]
-            click_type = text_splite[0]
+            click_type = text_splite[1]
             result = {"type":txt_head,"position":position,"click_type":click_type}
         elif txt_head == "<type2>":
             slide_size = text_splite[0]
@@ -69,7 +67,7 @@ def deal_head(head_text:str):
             result.append(tem_str)
             tem_str = ''
     result = {"thought":result[0],"memory":result[1]}
-    print("<head>:",result)
+
     return result
 
 # 
@@ -77,15 +75,27 @@ def for_text(list):
     for i in range(len(list)):
         print(list[i])
 # 
-def deal_response(aim_text):
-    if ' ' in aim_text:
-        aim_text = aim_text.replace(' ','')
-    aim_text = aim_text.split("|")
-    del aim_text[0]
-    thought_memory = aim_text.pop(0)
-    actions = aim_text[1:]
-    actions = deal_actions(actions)
-    thought_memory = deal_head(thought_memory)
-    del aim_text
-    return {"thought_memory":thought_memory,"actions":actions}
+def deal_response(aim_text:str):
+    if aim_text != "":
+        if ' ' in aim_text:
+            aim_text = aim_text.replace(' ','')
+        aim_text = aim_text.split("|")
+        b = []
+        if '' in aim_text:
+            for i in aim_text:
+                if i != '':
+                    b.append(i)
+            aim_text = b
+        thought_memory = aim_text.pop(0)
+        actions = aim_text[0:]
+        actions = deal_actions(actions)
+        thought_memory = deal_head(thought_memory)
+        del aim_text
+        return {"thought_memory":thought_memory,"actions":actions}
+    else:
+        return None
 # 
+if __name__ == "__main__":
+    txt = '|<head>["当前在VSCode界面，需要打开Edge浏览器访问燕云16声官网，任务栏中的Edge浏览器图标位置是(0.55, 0.96)，点击它启动浏览器","点击任务栏Edge图标启动浏览器以访问燕云16声官网"]|<type1>["(0.55, 0.96)","LEFT"]|<final>["False"]'
+    deal_response(txt)
+   
