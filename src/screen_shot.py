@@ -2,6 +2,84 @@ from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
 from PIL import ImageGrab
+import uiautomation as auto
+import time
+
+
+def get_screen_text():
+    # 任务栏
+    root = auto.GetRootControl()
+
+    def mask_find(element: auto.Control, depth=0):
+
+        find_aim = False
+        aim = None
+
+        if not find_aim:
+            for child in element.GetChildren():
+                mask_find(child, depth+1)
+                if child.Name == "任务栏":
+                    find_aim = True
+                    aim = child
+        return aim
+    
+    def track_mask_list(contral: auto.Control):
+        rect = contral.BoundingRectangle
+
+        center = (rect.left + rect.width()//2, rect.top + rect.height()//2)
+
+        mask_list = {
+            "名称": contral.Name,
+            "位置": center,
+            "子元素": []
+        }
+        for child in contral.GetChildren():
+            rect = child.BoundingRectangle
+            center = (rect.left + rect.width()//2, rect.top + rect.height()//2)
+            mask_list["子元素"].append({
+                "名称": child.Name,
+                "位置": center,
+                "子元素": [ track_mask_list(child) for child in child.GetChildren() ]
+            })
+
+        return mask_list
+
+    def tree_to_list(mask_list):
+        list =[]
+        def traverse(mask_list):
+            if mask_list["名称"] != "":
+                list.append((mask_list["名称"], mask_list["位置"]))
+            for child in mask_list["子元素"]:
+                traverse(child)
+        traverse(mask_list)
+        return list
+
+    mask = mask_find(root)
+
+    #print(mask)
+
+    mask = track_mask_list(mask)
+    mask = tree_to_list(mask)
+
+    # front window
+    front = auto.GetForegroundControl()
+    front = track_mask_list(front)
+    front = tree_to_list(front)
+
+    #print(1,front)
+
+
+    return "" f"任务栏: {mask}\n当前窗口: {front}"
+
+
+if __name__ == "__main__":
+    time.sleep(5)
+    
+    self_tree = get_screen_text()
+
+    print(self_tree)
+
+
 
 def get_screen_size(image_path):
     # 获取屏幕尺寸
